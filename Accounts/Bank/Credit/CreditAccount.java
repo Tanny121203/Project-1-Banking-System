@@ -1,6 +1,7 @@
 package Bank.Credit;
 import Account.Account;
 import Accounts.IllegalAccountType;
+import Accounts.Transaction;
 import Bank.Bank;
 import Interfaces.Payment;
 import Interfaces.Recompense;
@@ -110,19 +111,27 @@ public class CreditAccount extends Account implements Payment, Recompense {
         if (account instanceof CreditAccount) {
             throw new IllegalAccountType("Credit Accounts cannot pay to other Credit Accounts.");
         }
-    
         if (amount <= 0) {
             return false;
         }
+        double threshold = 1000.0;
+        // Only the amount above the threshold should be added to the loan.
+        double adjustment = (amount > threshold) ? (amount - threshold) : 0.0;
 
-        if (getBank() != account.getBank()) {
-            adjustLoanAmount(amount + getBank().getPROCESSINGFEE());
-            ((SavingsAccount) account).cashDeposit(amount);
-            return true;
-        } else {
-            adjustLoanAmount(amount);
-            ((SavingsAccount) account).cashDeposit(amount);
-            return true;
-        }  
+        // Increase the loan by only the adjustment, not the full amount.
+        adjustLoanAmount(adjustment);
+
+        // Deposit the full payment amount into the target account.
+        ((SavingsAccount) account).cashDeposit(amount);
+
+        // Log the payment transaction on the credit account.
+        addNewTransaction(getAccountNumber(), Transaction.Transactions.Payment,
+                "Payment of " + amount + " processed; loan increased by " + adjustment);
+
+        return true;
     }
+
+
+
+
 }

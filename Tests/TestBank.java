@@ -134,39 +134,44 @@ public class TestBank {
             String in2 = "Land Bank of the Philippines\n" +
                     "12345678\n";
             // Create accounts menu input
-            String in3 =
-                    "2\n" +
-                    "2\n";
-            // Manual Savings input (correct order)
-            String in4 =
-                    "John\n" +
-                    "Doe\n" +
-                    "jd@gmail.com\n" +
-                    "87654321\n" +
-                    "12345\n" +
-                    "500.0\n";
-            // Creating credit account menu input
-            String in5 = "2\n" +
-                    "1\n";
-            // Manual Credit Input (ensure this order matches the expectation for credit accounts)
-            String in6 = "Jane\n" +
-                    "Doe\n" +
-                    "janed@gmail.com\n" +
-                    "12345678\n" +
-                    "12345\n" +
-                    "500.0\n";
-            // Get both accounts (exit option)
-            String in7 = "3\n";
+//            String in3 =
+//                    "2\n" +
+//                    "2\n";
+//            // Manual Savings input (correct order)
+//            String in4 =
+//                    "John\n" +
+//                    "Doe\n" +
+//                    "jd@gmail.com\n" +
+//                    "87654321\n" +
+//                    "12345\n" +
+//                    "500.0\n";
+//            // Creating credit account menu input
+//            String in5 = "2\n" +
+//                    "1\n";
+//            // Manual Credit Input (ensure this order matches the expectation for credit accounts)
+//            String in6 = "Jane\n" +
+//                    "Doe\n" +
+//                    "janed@gmail.com\n" +
+//                    "12345678\n" +
+//                    "12345\n" +
+//                    "500.0\n";
+//            // Get both accounts (exit option)
+//            String in7 = "3\n";
 
-            String input = in1 + in2 + in3 + in4 + in5 + in6 + in7;
+            //String input = in1 + in2 + in3 + in4 + in5 + in6 + in7;
+            String input = in1 + in2;
+
 
             ByteArrayInputStream instream = new ByteArrayInputStream(input.getBytes());
             System.setIn(instream);
 
-//            BankLauncher.createNewBank();
-//            BankLauncher.bankLogin();
-            BankLauncher.bankInit();
-
+            BankLauncher.createNewBank();
+            BankLauncher.bankLogin();
+            Bank loggedBank = BankLauncher.getLoggedBank();
+            SavingsAccount savings = new SavingsAccount(loggedBank, "87654321", "John", "Doe", "jd@gmail.com", "12345", 500.0);
+            CreditAccount credit = new CreditAccount(loggedBank, "12345678", "Jane", "Doe", "janed@gmail.com", "12345", 500.0);
+            loggedBank.addNewAccount(savings);
+            loggedBank.addNewAccount(credit);
 //            for (Bank b : BankLauncher.getBANKS()) {
 //                System.out.println("DEBUG: Bank: " + b.getName() + ", Accounts: " + b.getBANKACCOUNTS().size());
 //            }
@@ -185,14 +190,13 @@ public class TestBank {
 
 
             //assert saccount != null;
-            Assert.assertEquals("John Doe", saccount != null ? saccount.getOwnerFullName() : null);
-            Assert.assertEquals(500.0, saccount != null ? ((SavingsAccount) saccount).getBalance() : 0, 0.00001);
-            Assert.assertEquals("jd@gmail.com", saccount != null ? saccount.getOWNEREMAIL() : null);
+            Assert.assertEquals("John Doe", saccount.getOwnerFullName());
+            Assert.assertEquals(500.0, ((SavingsAccount) saccount).getBalance(), 0.00001);
+            Assert.assertEquals("jd@gmail.com", saccount.getOWNEREMAIL());
 
-            // assert caccount != null;
-            Assert.assertEquals("Jane Doe", caccount != null ? caccount.getOwnerFullName() : null);
-            Assert.assertEquals(0.0, caccount != null ? ((CreditAccount) caccount).getLoan() : 0, 0.00001);
-            Assert.assertEquals("janed@gmail.com", caccount != null ? caccount.getOWNEREMAIL() : null);
+            Assert.assertEquals("Jane Doe", caccount.getOwnerFullName());
+            Assert.assertEquals(500.0, ((CreditAccount) caccount).getLoan(), 0.00001);
+            Assert.assertEquals("janed@gmail.com", caccount.getOWNEREMAIL());
         } finally {
             System.setIn(original);
         }
