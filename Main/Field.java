@@ -59,7 +59,9 @@ public class Field<T, E> {
         while(true) {
             try {
                 // Prompt user to input
-                tempval = Main.prompt(phrase, inlineInput);
+                tempval = Main.prompt(phrase, inlineInput).trim();
+                //System.out.println("DEBUG: For prompt '" + phrase + "', read value: '" + tempval + "'");
+
                 // Cast String to a different type.
                 this.fieldValue = this.fieldType.cast(tempval);
             }

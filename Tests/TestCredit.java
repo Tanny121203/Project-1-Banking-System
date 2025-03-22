@@ -23,11 +23,11 @@ public class TestCredit {
         // Create savings account #1
         String in3 = "2\n2\n";
         // Manual Savings input
-        String in4 = "20010-00001\n1234\nJohn\nDoe\njd@gmail.com\n500.0\n";
+        String in4 = "20010-00001\n12345\nJohn\nDoe\njd@gmail.com\n500.0\n";
         // Creating credit account #1
         String in5 = "2\n1\n";
         // Manual Credit Input
-        String in6 = "20010-00002\n1234\nJane\nDoe\njaned@gmail.com\n1000.0\n";
+        String in6 = "20010-00002\n12345\nJane\nDoe\njaned@gmail.com\n1000.0\n";
         // Logout
         String in7 = "3\n";
 
@@ -45,6 +45,8 @@ public class TestCredit {
 
             SavingsAccount saccount1 = (SavingsAccount) BankLauncher.findAccount("20010-00001");
             CreditAccount caccount1 = (CreditAccount) BankLauncher.findAccount("20010-00002");
+            System.out.println(saccount1);
+            System.out.println(caccount1);
 
             saccount1.cashDeposit(10000.0);
             Assert.assertEquals(10500.0, saccount1.getBalance(), 0.00001);

@@ -20,7 +20,7 @@ public class TestSavings {
     public void test1() {
 
         // Create bank input
-        String in1 = "Land Bank of the Philippines\n12345678\n50000.0\n50000.0\n100000.0\n10.0\n";
+        String in1 = "0\nLand Bank of the Philippines\n12345678\n50000.0\n50000.0\n100000.0\n10.0\n";
         // Log in bank
         String in2 = "Land Bank of the Philippines\n12345678\n";
         // Create savings account #1
@@ -45,7 +45,7 @@ public class TestSavings {
             BankLauncher.createNewBank();
             // Do stuff
             BankLauncher.bankLogin();
-
+            BankLauncher.bankInit();
             SavingsAccount saccount1 = (SavingsAccount) BankLauncher.findAccount("20010-00001");
             SavingsAccount saccount2 = (SavingsAccount) BankLauncher.findAccount("20010-00002");
 
@@ -84,9 +84,9 @@ public class TestSavings {
     @Test
     public void test2() {
         // Create bank 1 input
-        String in1 = "BDO\naabbccdd\n50000.0\n50000.0\n100000.0\n10.0\n";
+        String in1 = "1\nBDO\n12345667\n50000.0\n50000.0\n100000.0\n10.0\n";
         // Create bank 2 input
-        String bn2 = "BDP\n12345667\n75000.0\n75000.0\n150000.0\n15.0\n";
+        String bn2 = "2\nBDP\n12345667\n75000.0\n75000.0\n150000.0\n15.0\n";
         // Log in bank 1
         String in2 = "BDO\naabbccdd\n";
         // Create savings account #1 for bank #1

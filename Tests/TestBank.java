@@ -19,6 +19,7 @@ public class TestBank {
 
     private final InputStream or = System.in;
 
+
     @BeforeEach
     public void reset() {
         System.setIn(or);
@@ -67,8 +68,22 @@ public class TestBank {
         InputStream original = System.in;
 
         try {
-            String in1 = "Land Bank of the Philippines\n12345678\n50000.0\n50000.0\n100000.0\n10.0\n";
-            String in2 = "Iglesia ni Dulay\n001122\n75000.0\n75000.0\n150000.0\n10.0\n";
+            String in1 =
+                    "0\n" +
+                    "Land Bank of the Philippines\n" +
+                    "12345678\n" +
+                    "50000.0\n" +
+                    "50000.0\n" +
+                    "100000.0\n" +
+                    "10.0\n";
+            String in2 =
+                    "1\n" +
+                    "Iglesia ni Catane\n" +
+                    "001122\n" +
+                    "75000.0\n" +
+                    "75000.0\n" +
+                    "150000.0\n" +
+                    "10.0\n";
 
             String myinput = in1 + in2;
 
@@ -93,7 +108,7 @@ public class TestBank {
             Assert.assertEquals(50000.0, bank1.getDEPOSITLIMIT(), 0.00001);
 
             // Test Bank 2 values
-            Assert.assertEquals("Iglesia ni Dulay", bank2.getName());
+            Assert.assertEquals("Iglesia ni Catane", bank2.getName());
             Assert.assertEquals(150000.0, bank2.getCREDITLIMIT(), 0.00001);
             Assert.assertEquals(75000.0, bank2.getDEPOSITLIMIT(), 0.00001);
             Assert.assertEquals(75000.0, bank2.getDEPOSITLIMIT(), 0.00001);
@@ -109,37 +124,69 @@ public class TestBank {
 
         try {
             // Create bank input
-            String in1 = "Land Bank of the Philippines\n12345678\n50000.0\n50000.0\n100000.0\n10.0\n";
+            String in1 =
+                    "0\n" +
+                            "Land Bank of the Philippines\n" +
+                            "12345678\n" +
+                            "50000.0\n" +
+                            "50000.0\n" +
+                            "100000.0\n" +
+                            "10.0\n";
             // Log in bank
-            String in2 = "Land Bank of the Philippines\n12345678\n";
-            // Create savings
-            String in3 = "2\n2\n";
-            // Manual Savings input
-            String in4 = "20010-00001\n1234\nJohn\nDoe\njd@gmail.com\n500.0\n";
-            // Creating credit
-            String in5 = "2\n1\n";
-            // Manual Credit Input
-            String in6 = "20010-00002\n1234\nJane\nDoe\njaned@gmail.com\n";
-            // Get both accounts
+            String in2 = "Land Bank of the Philippines\n" +
+                    "12345678\n";
+            // Create accounts menu input
+            String in3 =
+                    "2\n" +
+                    "2\n";
+            // Manual Savings input (correct order)
+            String in4 =
+                    "John\n" +
+                    "Doe\n" +
+                    "jd@gmail.com\n" +
+                    "87654321\n" +
+                    "12345\n" +
+                    "500.0\n";
+            // Creating credit account menu input
+            String in5 = "2\n" +
+                    "1\n";
+            // Manual Credit Input (ensure this order matches the expectation for credit accounts)
+            String in6 = "Jane\n" +
+                    "Doe\n" +
+                    "janed@gmail.com\n" +
+                    "12345678\n" +
+                    "12345\n" +
+                    "500.0\n";
+            // Get both accounts (exit option)
             String in7 = "3\n";
 
             String input = in1 + in2 + in3 + in4 + in5 + in6 + in7;
 
             ByteArrayInputStream instream = new ByteArrayInputStream(input.getBytes());
-
             System.setIn(instream);
+
             BankLauncher.createNewBank();
-            // Do stuff
             BankLauncher.bankLogin();
 
-            // Get accounts after all of that
-            Account saccount = BankLauncher.findAccount("20010-00001");
-            Account caccount = BankLauncher.findAccount("20010-00002");
+//            for (Bank b : BankLauncher.getBANKS()) {
+//                System.out.println("DEBUG: Bank: " + b.getName() + ", Accounts: " + b.getBANKACCOUNTS().size());
+//            }
 
+            // (Make sure the public workflow that creates accounts is triggered so that in3-in7 are processed)
+
+            // Get accounts after all of that
+            Account saccount = BankLauncher.findAccount("87654321");
+            Account caccount = BankLauncher.findAccount("12345678");
+            System.out.println(saccount);
+            System.out.println(caccount);
+
+
+            //assert saccount != null;
             Assert.assertEquals("John Doe", saccount.getOwnerFullName());
             Assert.assertEquals(500.0, ((SavingsAccount) saccount).getBalance(), 0.00001);
             Assert.assertEquals("jd@gmail.com", saccount.getOWNEREMAIL());
 
+            // assert caccount != null;
             Assert.assertEquals("Jane Doe", caccount.getOwnerFullName());
             Assert.assertEquals(0.0, ((CreditAccount) caccount).getLoan(), 0.00001);
             Assert.assertEquals("janed@gmail.com", caccount.getOWNEREMAIL());
@@ -147,4 +194,5 @@ public class TestBank {
             System.setIn(original);
         }
     }
+
 }

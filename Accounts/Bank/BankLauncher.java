@@ -99,8 +99,8 @@ public class BankLauncher {
      */
     public static void bankLogin() {
         Main.showMenuHeader("Bank Login");
-        String bankName = Main.prompt("Enter bank name: ", true);
-        String pin = Main.prompt("Enter PIN: ", true);
+            String bankName = Main.prompt("Enter bank name: ", false);
+        String pin = Main.prompt("Enter PIN: ",true);
         
         for (Bank bank : BANKS) {
             if (bank.getName().equals(bankName) && bank.getPasscode().equals(pin)) {
@@ -180,8 +180,8 @@ public class BankLauncher {
         Field<Double,Double> processingFeeField = new Field<>("Processing Fee", Double.class, 0.0, new Field.DoubleFieldValidator());
 
         try {
-            idField.setFieldValue("Bank ID: ",false);
-            nameField.setFieldValue("Bank Name: ");
+            idField.setFieldValue("Bank ID: ",true);
+            nameField.setFieldValue("Bank Name: ",false);
             passcodeField.setFieldValue("Bank Passcode: ");
             depositLimitField.setFieldValue("Deposit Limit (0 for default): ");
             withdrawLimitField.setFieldValue("Withdraw Limit (0 for default): ");
@@ -261,15 +261,19 @@ public class BankLauncher {
  * If the account number exists in any bank, it retrieves the corresponding Account object using the bank's method
  * `getBankAccount()`. It returns the found Account object. If the account number is not found in any bank, it returns null.
  */
-    public static Account findAccount(String accountNum) {
-        for (Bank bank : getBANKS()) {
-            if (Bank.accountExists(bank, accountNum) == true){
-                return bank.getBankAccount(bank, accountNum);
-            }
-        }
-        // If the account number is not found in any bank, return null
-        return null;
-    }
+   public static Account findAccount(String accountNum) {
+       for (Bank bank : getBANKS()) {
+           for (Account acc : bank.getBANKACCOUNTS()) {
+               if (acc.getAccountNumber().trim().equals(accountNum.trim())) {
+                   return acc;
+               }
+           }
+       }
+       return null;
+   }
+
+
+
 
     /**
      * Retrieves the size of the bank.

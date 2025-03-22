@@ -59,8 +59,8 @@ public abstract class Account {
 
     public void addNewTransaction(String accountNum, Transaction.Transactions type, String description) {
         Transaction transaction = new Transaction(accountNum, type, description);
-        TRANSACTIONS.add(transaction);
-        System.out.println("A successful " + type + ".");
+        getTRANSACTIONS().add(transaction);
+        System.out.println("New transaction added to this account.");
     }
 
     /**
@@ -69,18 +69,11 @@ public abstract class Account {
     * @return         	description of the transactions information
     */
     public String getTransactionsInfo() {
-        String transactionsInfo = "Transactions for the Account Number: " + ACCOUNTNUMBER + "\n";
-        
-        int i = 0;
-        while (i < TRANSACTIONS.size()) {
-            Transaction transaction = TRANSACTIONS.get(i);
-            transactionsInfo += "Transaction Type: " + transaction.transactionType + "\n";
-            transactionsInfo += "Description: " + transaction.description + "\n";
-            i++;
+        String result = "Transactions: \n";
+        for(Transaction transaction : getTRANSACTIONS()) {
+            result += transaction.description + "\n";
         }
-        
-        
-        return transactionsInfo;
+        return result;
     }
      /**
      * Returns a string representation of the account, including details such as bank information, account number,
